@@ -5,3 +5,6 @@
 # Resultado 1: 'aprndo'
 #  Ejemplo 2: 'escribiendo código'
 # Resultado 2: 'escigo'
+
+texto = input("Ingrese string: ")
+print(texto[0],texto[1],texto[2],texto[-3],texto[-2],texto[-1])
