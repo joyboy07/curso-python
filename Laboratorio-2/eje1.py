@@ -15,5 +15,8 @@ print('Resultado de la b usando math:',m.sqrt(1**2 + (-3)**2))
 resultado = m.atan2(3, 4)
 print('Resultado de la arg:', resultado)
 
+resultado = m.gcd(1260, 3846)
+print('MCD de 1260 y 3846:', resultado)
+
 
 
