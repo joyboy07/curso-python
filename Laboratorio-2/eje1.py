@@ -12,5 +12,8 @@ print('Resultado de la b usando pow:',pow(1**2+(-3)**2,1/2))
 print('Resultado de la b usando numpy:',np.sqrt(1**2 + (-3)**2))
 print('Resultado de la b usando math:',m.sqrt(1**2 + (-3)**2))
 
+resultado = m.atan2(3, 4)
+print('Resultado de la arg:', resultado)
+
 
 
