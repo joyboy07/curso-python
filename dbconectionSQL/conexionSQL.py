@@ -5,7 +5,7 @@ import pymssql
 server = '192.168.201.212'  # Por ejemplo: 'localhost' o 'mi_servidor'
 database = 'DNCN_ComercioExt'
 username = 'sa'
-password = '$Inei2019*'
+password = ''
 
 try:
     # Establecer la conexión
