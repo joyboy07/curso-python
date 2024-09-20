@@ -17,3 +17,6 @@ print("Resultado: ",ceil_x, fix_x, floor_x, round_x)
 
 
 
+
+
+

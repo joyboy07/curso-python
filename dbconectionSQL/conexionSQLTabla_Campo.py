@@ -3,7 +3,7 @@ import pandas as pd
 
 # Datos de conexión
 
-server = '192.168.201.212'  # Por ejemplo: 'localhost' o 'mi_servidor'
+server = ''  # Por ejemplo: 'localhost' o 'mi_servidor'
 database = 'DNCN_ComercioExt'
 username = 'sa'
 password = ''
