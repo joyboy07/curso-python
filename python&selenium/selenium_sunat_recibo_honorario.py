@@ -21,10 +21,10 @@ button = WebDriverWait(driver, 10).until(EC.element_to_be_clickable((By.ID, "btn
 
 user = driver.find_element(By.ID,"txtDni")
 user.clear()
-user.send_keys("76934958")
+user.send_keys("usuario")
 password = driver.find_element(By.ID,"txtContrasena")
 password.clear()
-password.send_keys("Kihubi12369")
+password.send_keys("password")
 
 button = WebDriverWait(driver, 10).until(EC.element_to_be_clickable((By.ID, "btnAceptar"))).click()
 
