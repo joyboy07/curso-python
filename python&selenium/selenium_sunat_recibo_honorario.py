@@ -4,7 +4,7 @@ from selenium.webdriver.support import expected_conditions as EC
 from selenium.webdriver.common.by import By
 from selenium.webdriver.support.ui import Select
 from selenium.webdriver.support.wait import WebDriverWait
-from selenium.common.exceptions import UnexpectedAlertPresentException, NoAlertPresentException
+from selenium.common.exceptions import UnexpectedAlertPresentException, NoAlertPresentException, TimeoutException
 from selenium.webdriver.common.alert import Alert
 import time
 from selenium.webdriver.common.action_chains import ActionChains
@@ -71,7 +71,36 @@ radioButonNo = WebDriverWait(driver, 10).until(EC.element_to_be_clickable((By.CS
 radioButonNo.click()
 
 try:
-    cantidad = driver.find_element(By.ID, "totalHonorarios")
+    x = driver.find_element(By.ID, "totalHonorarios")
+    try:
+        alert = driver.switch_to.alert
+        alert.accept()
+    except Exception as e:
+        print("No se encontró ninguna alerta.")
+    x.click()
+    actions = ActionChains(driver)
+    actions.send_keys(Keys.HOME).perform()
+    actions.send_keys("350").perform()
+    actions.send_keys(Keys.ENTER).perform()
+
+except Exception as e:
+    print(f"Error: {e}")
+
+
+boton_cuota = WebDriverWait(driver, 10).until(EC.element_to_be_clickable((By.ID, "addCuota"))).click()
+fecha_input = WebDriverWait(driver, 10).until(
+    EC.visibility_of_element_located((By.ID, "fecCuotaId"))
+)
+
+# Habilitar el campo de entrada de fecha
+driver.execute_script("arguments[0].removeAttribute('disabled');", fecha_input)
+
+# Establecer el valor de la fecha
+fecha_input.clear()
+fecha_input.send_keys("20/10/2024")  # Cambia a la fecha que necesites
+
+try:
+    cantidad = driver.find_element(By.ID, "valorCuota")
     try:
         alert = driver.switch_to.alert
         alert.accept()
@@ -86,12 +115,18 @@ try:
 except Exception as e:
     print(f"Error: {e}")
 
+z = WebDriverWait(driver, 10).until(EC.element_to_be_clickable((By.ID, "addModifCuota"))).click()
 
-boton_cuota = WebDriverWait(driver, 10).until(EC.element_to_be_clickable((By.ID, "addCuota"))).click()
+boton_conti = WebDriverWait(driver, 10).until(EC.element_to_be_clickable((By.ID, "wacepta"))).click()
 
-x = driver.find_element(By.ID,"fecCuotaId")
-x.clear()
-x.send_keys("20/09/2024")
+Emitir = WebDriverWait(driver, 10).until(EC.element_to_be_clickable((By.NAME, "wacepta"))).click()
 
+try:
+    descargar = WebDriverWait(driver, 10).until(
+        EC.element_to_be_clickable((By.CSS_SELECTOR, 'a[title="Presione este link para descargar el archivo pdf del Recibo por Honorarios Electrónico. "]'))
+    )
+    descargar.click()
+except TimeoutException:
+    print("El enlace de descarga no está disponible.")
 
-time.sleep(10)
+time.sleep(40)
