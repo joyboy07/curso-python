@@ -4,7 +4,7 @@ from selenium.webdriver.support import expected_conditions as EC
 from selenium.webdriver.common.by import By
 from selenium.webdriver.support.wait import WebDriverWait
 from selenium.common.exceptions import TimeoutException
-import time
+from decouple import config
 import pandas as pd
 from bs4 import BeautifulSoup
 from selenium.webdriver.chrome.options import Options
@@ -12,22 +12,12 @@ from selenium.webdriver.chrome.options import Options
 chrome_driver_path = 'C:/Users/jporlles/Desktop/dev/curso-python/python&selenium/chromedriver-win32/chromedriver.exe'
 service = Service(executable_path=chrome_driver_path)
 
-ruta_archivo = "D:/seach_ruc/entrada/relacion_televisoras.xlsx"
+ruta_archivo = config('ENTRADA')
 df = pd.read_excel(ruta_archivo)
 
 def consulta_ruc(nombre):
-
+    driver = webdriver.Chrome(service=service)
     try:
-        chrome_options = Options()
-        chrome_options.add_argument("--headless=new")  # Modo headless (con la nueva versión de headless)
-        chrome_options.add_argument("--disable-gpu")  # Deshabilita la GPU (opcional para rendimiento)
-        chrome_options.add_argument("--no-sandbox")  # Evita errores en entornos de servidor
-        chrome_options.add_argument("--disable-dev-shm-usage")  # Optimización de memoria
-        chrome_options.add_argument("start-maximized")  # Comienza en ventana maximizada (aunque no se vea)
-        chrome_options.add_argument("disable-infobars")  # Deshabilita las barras de información
-        chrome_options.add_argument("--disable-extensions")
-
-        driver = webdriver.Chrome(service=service, options=chrome_options)
         driver.get("https://e-consultaruc.sunat.gob.pe/cl-ti-itmrconsruc/FrameCriterioBusquedaWeb.jsp")
 
         WebDriverWait(driver, 10).until(EC.element_to_be_clickable((By.ID, "btnPorRazonSocial"))).click()
@@ -70,17 +60,7 @@ def consulta_ruc(nombre):
 
 def universidadPeru(nombre):
     try:
-
-        chrome_options = Options()
-        chrome_options.add_argument("--headless=new")  # Modo headless (con la nueva versión de headless)
-        chrome_options.add_argument("--disable-gpu")  # Deshabilita la GPU (opcional para rendimiento)
-        chrome_options.add_argument("--no-sandbox")  # Evita errores en entornos de servidor
-        chrome_options.add_argument("--disable-dev-shm-usage")  # Optimización de memoria
-        chrome_options.add_argument("start-maximized")  # Comienza en ventana maximizada (aunque no se vea)
-        chrome_options.add_argument("disable-infobars")  # Deshabilita las barras de información
-        chrome_options.add_argument("--disable-extensions")
-
-        driver = webdriver.Chrome(service=service, options=chrome_options)
+        driver = webdriver.Chrome(service=service)
         driver.get("https://www.universidadperu.com/empresas/busqueda/")
         input = driver.find_element(By.ID, "buscaempresa1")
         input.clear()
@@ -118,25 +98,20 @@ data ={
     'desEcnontrado':[]
 
 }
-mi_lista = []
 
 for index, row in df.iterrows():
     resultado = consulta_ruc(row['Razón Social'])
     if resultado is None:
         resultado2 = universidadPeru(row['Razón Social'])
-        mi_lista.append(resultado2)
         data['empresa'].append(resultado2['empresa'])
         data['rucEncontrado'].append(resultado2['rucEncontrado'])
         data['desEcnontrado'].append(resultado2['desEcnontrado'])
     else:
-        mi_lista.append(resultado)
         data['empresa'].append(resultado['empresa'])
         data['rucEncontrado'].append(resultado['rucEncontrado'])
         data['desEcnontrado'].append(resultado['desEcnontrado'])
 
 
 df = pd.DataFrame(data)
-ruta = 'D:/seach_ruc/salida/resutaldo.xlsx'
+ruta = config('SALIDA')
 df.to_excel(ruta, index=False, engine='openpyxl')
-
-print(mi_lista)
